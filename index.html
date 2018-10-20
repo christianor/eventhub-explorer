@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Event Hub Explorer</title>
+  </head>
+  <body>
+    <h1>Event Hub Explorer</h1>
+
+    Connection String
+    <textarea id="textarea" title="Connection String"></textarea>
+    <input type="button" id="button" value="Connect"/>
+    <div id="notification"></div>
+    <div style="width:800px">
+      <table id="table">
+        <thead><th>Time</th><th>App Properties</th><th>Data</th></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <script>
+      let textarea = document.getElementById("textarea")
+      let button = document.getElementById("button")
+      let notification = document.getElementById("notification")
+      let table = document.getElementById("table")
+
+      const onMessage = (eventData) => {
+        let row = table.insertRow()
+        row.insertCell().textContent = eventData.enqueuedTimeUtc
+        
+        let props = ""
+        for (let prop in eventData.applicationProperties) {
+          if (eventData.applicationProperties.hasOwnProperty(prop)) {
+            props += prop + "=" +  eventData.applicationProperties[prop] + " "
+          }
+        }
+
+        row.insertCell().textContent = props
+        row.insertCell().textContent = toHexString(eventData.body)
+      }
+
+      const onError = (error) => {
+        notify(error)
+      }
+
+      button.onclick = async function (e) { 
+        const { EventHubClient, EventPosition } = require('@azure/event-hubs')
+        try { 
+          const client = EventHubClient.createFromConnectionString(textarea.value)
+          notify("Connection established")
+          const partitionIds = await client.getPartitionIds()
+          notify("Available Partitions: " + partitionIds)
+
+          partitionIds.forEach(partition => {
+            const receiveHandler = client.receive(partition, onMessage, onError, { eventPosition: EventPosition.fromEnqueuedTime(Date.now()) });
+          });
+        }
+        catch (error) {
+          notify(error)
+        }
+      }
+
+      function notify(text) {
+        notification.innerText = text
+      }
+
+      function toHexString(byteArray) {
+        return Array.prototype.map.call(byteArray, function(byte) {
+          return ('0' + (byte & 0xFF).toString(16)).slice(-2)
+        }).join('')
+      }
+
+    </script>
+  </body>
+</html>
