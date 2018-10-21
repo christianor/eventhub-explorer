@@ -1,21 +1,20 @@
 {
-  "name": "electron-quick-start",
+  "name": "eventhub-explorer",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Exploration utility for Azure Event Hubs",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/christianor/eventhub-explorer",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Azure",
+    "Event Hub",
+    "Explorer",
+    "Events",
+    "Service Bus"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Christian Ortiz",
   "devDependencies": {
     "electron": "^3.0.3"
   },
