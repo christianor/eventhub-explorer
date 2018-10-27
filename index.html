@@ -5,18 +5,14 @@
     <title>Event Hub Explorer</title>
   </head>
   <body>
-    <h1>Event Hub Explorer</h1>
-
     Connection String
     <textarea id="textarea" title="Connection String"></textarea>
     <input type="button" id="button" value="Connect"/>
     <div id="notification"></div>
-    <div style="width:800px">
-      <table id="table">
-        <thead><th>Time</th><th>App Properties</th><th>Data</th></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <table id="table">
+      <thead><tr><th>Time</th><th>App Properties</th><th>Data</th></tr></thead>
+      <tbody></tbody>
+    </table>
 
     <script>
       let textarea = document.getElementById("textarea")
